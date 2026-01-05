@@ -17,7 +17,11 @@ router.post("/locations", requireAuth, async (req, res) => {
     );
     res.status(201).json({ ok: true });
   } catch (e) {
-    console.error(e);
+    if (e.code === "ECONNREFUSED" || e.code === "ENOTFOUND") {
+      console.error("DB connection error:", e.message);
+      return res.status(503).json({ error: "database unavailable" });
+    }
+    console.error("Insert location error:", e);
     res.status(500).json({ error: "db insert failed" });
   }
 });
@@ -37,7 +41,11 @@ router.get("/locations", requireAuth, async (req, res) => {
         );
     res.json(result.rows);
   } catch (e) {
-    console.error(e);
+    if (e.code === "ECONNREFUSED" || e.code === "ENOTFOUND") {
+      console.error("DB connection error:", e.message);
+      return res.status(503).json({ error: "database unavailable" });
+    }
+    console.error("Get locations error:", e);
     res.status(500).json({ error: "db select failed" });
   }
 });

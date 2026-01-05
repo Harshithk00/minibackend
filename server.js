@@ -20,11 +20,8 @@ app.get(["/health", "/api/health"], (req, res) => {
   res.json({ ok: true, uptime: process.uptime(), timestamp: Date.now() });
 });
 
-// When running locally, start the listener. On Vercel we just export the app.
-// Allow forcing a listener even if VERCEL is present via FORCE_LISTEN=true.
+// Start the listener
 const port = process.env.PORT || 3000;
-if (!process.env.VERCEL || process.env.FORCE_LISTEN === "true") {
-  app.listen(port, () => console.log(`API listening on ${port}`));
-}
+app.listen(port, () => console.log(`API listening on ${port}`));
 
 export default app;

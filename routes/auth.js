@@ -18,7 +18,11 @@ router.post("/auth/register", async (req, res) => {
     res.status(201).json({ token: signToken(user), user });
   } catch (e) {
     if (e.code === "23505") return res.status(409).json({ error: "email already exists" });
-    console.error(e);
+    if (e.code === "ECONNREFUSED" || e.code === "ENOTFOUND") {
+      console.error("DB connection error:", e.message);
+      return res.status(503).json({ error: "database unavailable" });
+    }
+    console.error("Register error:", e);
     res.status(500).json({ error: "server error" });
   }
 });
@@ -34,7 +38,11 @@ router.post("/auth/login", async (req, res) => {
     if (!ok) return res.status(401).json({ error: "invalid credentials" });
     res.json({ token: signToken(user), user: { id: user.id, email: user.email, name: user.name } });
   } catch (e) {
-    console.error(e);
+    if (e.code === "ECONNREFUSED" || e.code === "ENOTFOUND") {
+      console.error("DB connection error:", e.message);
+      return res.status(503).json({ error: "database unavailable" });
+    }
+    console.error("Login error:", e);
     res.status(500).json({ error: "server error" });
   }
 });
