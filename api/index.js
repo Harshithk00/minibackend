@@ -1,3 +1,6 @@
 import app from "../server.js";
 
-export default app;
+// Vercel Node function entrypoint
+export default function handler(req, res) {
+	return app(req, res);
+}
