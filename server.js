@@ -20,8 +20,10 @@ app.get(["/health", "/api/health"], (req, res) => {
   res.json({ ok: true, uptime: process.uptime(), timestamp: Date.now() });
 });
 
-// Start the listener
+// Start the listener only when not on Vercel
 const port = process.env.PORT || 3000;
-app.listen(port, () => console.log(`API listening on ${port}`));
+if (!process.env.VERCEL) {
+  app.listen(port, () => console.log(`API listening on ${port}`));
+}
 
 export default app;
