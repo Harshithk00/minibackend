@@ -32,7 +32,9 @@ async function requireAuth(req, res, next) {
   }
 }
 
-app.post("/api/auth/register", async (req, res) => {
+const api = express.Router();
+
+api.post("/auth/register", async (req, res) => {
   const { email, password, name } = req.body || {};
   if (!email || !password || !name) return res.status(400).json({ error: "email, password, name required" });
   try {
@@ -50,7 +52,7 @@ app.post("/api/auth/register", async (req, res) => {
   }
 });
 
-app.post("/api/auth/login", async (req, res) => {
+api.post("/auth/login", async (req, res) => {
   const { email, password } = req.body || {};
   if (!email || !password) return res.status(400).json({ error: "email and password required" });
   try {
@@ -66,7 +68,7 @@ app.post("/api/auth/login", async (req, res) => {
   }
 });
 
-app.post("/api/locations", requireAuth, async (req, res) => {
+api.post("/locations", requireAuth, async (req, res) => {
   const { device, lat, lon, ts } = req.body || {};
   if (!device || typeof lat !== "number" || typeof lon !== "number") {
     return res.status(400).json({ error: "device, lat, lon required" });
@@ -84,7 +86,7 @@ app.post("/api/locations", requireAuth, async (req, res) => {
   }
 });
 
-app.get("/api/locations", requireAuth, async (req, res) => {
+api.get("/locations", requireAuth, async (req, res) => {
   const { device, limit = 50 } = req.query;
   const lim = Math.min(parseInt(limit, 10) || 50, 500);
   try {
@@ -103,6 +105,8 @@ app.get("/api/locations", requireAuth, async (req, res) => {
     res.status(500).json({ error: "db select failed" });
   }
 });
+
+app.use("/api", api);
 
 // Public health checks (no auth)
 app.get(["/health", "/api/health"], (req, res) => {
