@@ -11,9 +11,9 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Mount feature routers on both /api and root so Vercel path stripping still hits routes
-app.use(["/api", "/"], authRouter);
-app.use(["/api", "/"], locationsRouter);
+// Mount feature routers under /api namespace
+app.use("/api", authRouter);
+app.use("/api", locationsRouter);
 
 // Public health checks (no auth)
 app.get(["/health", "/api/health"], (req, res) => {
