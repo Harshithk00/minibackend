@@ -108,5 +108,10 @@ app.get("/api/health", (req, res) => {
   res.json({ ok: true, uptime: process.uptime(), timestamp: Date.now() });
 });
 
-const port = process.env.PORT;
-app.listen(port, () => console.log(`API listening on ${port}`));
+// When running locally, start the listener. On Vercel we just export the app.
+const port = process.env.PORT || 3000;
+if (!process.env.VERCEL) {
+  app.listen(port, () => console.log(`API listening on ${port}`));
+}
+
+export default app;
