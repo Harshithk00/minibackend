@@ -104,5 +104,5 @@ app.get("/api/locations", requireAuth, async (req, res) => {
   }
 });
 
-const port = process.env.PORT || 4000;
+const port = process.env.PORT;
 app.listen(port, () => console.log(`API listening on ${port}`));
