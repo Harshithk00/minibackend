@@ -104,5 +104,9 @@ app.get("/api/locations", requireAuth, async (req, res) => {
   }
 });
 
+app.get("/api/health", (req, res) => {
+  res.json({ ok: true, uptime: process.uptime(), timestamp: Date.now() });
+});
+
 const port = process.env.PORT;
 app.listen(port, () => console.log(`API listening on ${port}`));
