@@ -104,7 +104,8 @@ app.get("/api/locations", requireAuth, async (req, res) => {
   }
 });
 
-app.get("/api/health", (req, res) => {
+// Public health checks (no auth)
+app.get(["/health", "/api/health"], (req, res) => {
   res.json({ ok: true, uptime: process.uptime(), timestamp: Date.now() });
 });
 
