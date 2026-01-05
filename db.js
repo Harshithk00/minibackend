@@ -14,7 +14,6 @@ export const pool = new Pool({
 });
 
 
-
 // Visibility is good — keep this
 pool.on("connect", () => {
   console.log("DB pool connected (SSL verified)");
